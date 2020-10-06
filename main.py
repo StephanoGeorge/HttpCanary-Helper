@@ -62,7 +62,6 @@ for ipFolder in workDirPath.iterdir():
                         isImage = True
             if isGzip and not isImage:
                 fileContent2 = oldFile.read_bytes()
-                responseHeaders = fileContent2[:record.RES_BODY_OFFSET]
                 responseBody = fileContent2[record.RES_BODY_OFFSET:]
                 if responseBody[:2] == b'\x1f\x8b':  # Magic code of gzip
                     responseRawBody = responseBody
@@ -80,8 +79,9 @@ for ipFolder in workDirPath.iterdir():
                         responseRawBody += responseBody[:length]
                         responseBody = responseBody[length:]
                 responseData = gzip.decompress(responseRawBody)
-                with file.open('wb') as io4:
-                    io4.write(responseHeaders)
+                with file.open('wb+') as io4:
+                    io4.seek(record.RES_BODY_OFFSET)
+                    io4.truncate()
                     io4.write(responseData)
             else:
                 if not remove:
