@@ -101,4 +101,4 @@ for ipFolder in workDirPath.iterdir():
                     io4.write(responseBody)
     else:
         if remove:
-            shutil.rmtree(ipFolder)
+            ipFolder.rmdir()
