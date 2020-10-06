@@ -3,6 +3,7 @@ import gzip
 import json
 import re
 from pathlib import Path
+from urllib import parse
 
 import peewee as pw
 
@@ -45,7 +46,10 @@ for ipFolder in workDirPath.iterdir():
             oldFile = file
         if fileTypeStr == 'req':
             fileContent1 = bytearray(oldFile.read_bytes())
-            fileContent1[:fileContent1.index(b'\r\n')] = f'{record.URL} {record.METHOD} {record.REQ_PROTOCOL}'.encode()
+            urlSplitResult = parse.urlsplit(record.URL)
+            queries = '\r\n'.join([f'{key} = {value}' for key, value in parse.parse_qsl(urlSplitResult.query)])
+            fileContent1[:fileContent1.index(b'\r\n')] = f'{record.METHOD} {record.REQ_PROTOCOL}\r\n{record.URL}\r\n' \
+                                                         f'{queries}\r\n'.encode()
             file.write_bytes(fileContent1)
         else:
             isGzip = False
