@@ -95,7 +95,7 @@ for ipFolder in workDirPath.iterdir():
             if contentType.startswith('application/json'):
                 rewrite = True
                 responseBody = json.dumps(json.loads(responseBody), ensure_ascii=False, indent=4)
-            if remove and not rewrite:
+            if not remove or rewrite:
                 with file.open('wb+') as io4:
                     io4.write(responseHeaders)
                     io4.write(responseBody)
