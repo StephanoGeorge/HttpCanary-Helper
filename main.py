@@ -65,7 +65,9 @@ for ipFolder in workDirPath.iterdir():
             fileContent2 = oldFile.read_bytes()
             responseHeaders = fileContent2[:record.RES_BODY_OFFSET]
             responseBody = fileContent2[record.RES_BODY_OFFSET:]
+            rewrite = False
             if isGzip:
+                rewrite = True
                 if responseBody[:2] == b'\x1f\x8b':  # Magic code of gzip
                     responseRawBody = responseBody
                 else:
@@ -83,10 +85,12 @@ for ipFolder in workDirPath.iterdir():
                         responseBody = responseBody[length:]
                 responseBody = gzip.decompress(responseRawBody)
             if contentType.startswith('application/json'):
+                rewrite = True
                 responseBody = json.dumps(json.loads(responseBody), ensure_ascii=False, indent=4)
-            with file.open('wb+') as io4:
-                io4.write(responseHeaders)
-                io4.write(responseBody)
+            if remove and not rewrite:
+                with file.open('wb+') as io4:
+                    io4.write(responseHeaders)
+                    io4.write(responseBody)
     else:
         if remove:
             ipFolder.rmdir()
