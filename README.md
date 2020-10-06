@@ -12,9 +12,13 @@ Organize capture files
 
    将 session id 置于文件名开头
 
-- decompress gzip response (not image)
+- decompress gzip response
 
-  解压 gzip 响应 (非图片)
+  解压 gzip 响应
+
+- format JSON response
+
+  格式化 JSON 响应
 
 - change uri to full url in request
 

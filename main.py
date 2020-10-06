@@ -2,7 +2,6 @@ import argparse
 import gzip
 import json
 import re
-import shutil
 from pathlib import Path
 
 import peewee as pw
@@ -50,7 +49,7 @@ for ipFolder in workDirPath.iterdir():
             file.write_bytes(fileContent1)
         else:
             isGzip = False
-            isImage = False
+            contentType = ''
             if not record.RES_HEADERS:
                 continue
             for header1 in json.loads(record.RES_HEADERS):
@@ -58,11 +57,11 @@ for ipFolder in workDirPath.iterdir():
                     if header1['value'] == 'gzip':
                         isGzip = True
                 elif header1['name'].lower() == 'content-type':
-                    if header1['value'].startswith('image/'):
-                        isImage = True
-            if isGzip and not isImage:
-                fileContent2 = oldFile.read_bytes()
-                responseBody = fileContent2[record.RES_BODY_OFFSET:]
+                    contentType = header1['value']
+            fileContent2 = oldFile.read_bytes()
+            responseHeaders = fileContent2[:record.RES_BODY_OFFSET]
+            responseBody = fileContent2[record.RES_BODY_OFFSET:]
+            if isGzip:
                 if responseBody[:2] == b'\x1f\x8b':  # Magic code of gzip
                     responseRawBody = responseBody
                 else:
@@ -78,14 +77,12 @@ for ipFolder in workDirPath.iterdir():
                         responseBody = responseBody[index + 2:]
                         responseRawBody += responseBody[:length]
                         responseBody = responseBody[length:]
-                responseData = gzip.decompress(responseRawBody)
-                with file.open('wb+') as io4:
-                    io4.seek(record.RES_BODY_OFFSET)
-                    io4.truncate()
-                    io4.write(responseData)
-            else:
-                if not remove:
-                    shutil.copy(oldFile, file)
+                responseBody = gzip.decompress(responseRawBody)
+            if contentType.startswith('application/json'):
+                responseBody = json.dumps(json.loads(responseBody), ensure_ascii=False, indent=4)
+            with file.open('wb+') as io4:
+                io4.write(responseHeaders)
+                io4.write(responseBody)
     else:
         if remove:
             ipFolder.rmdir()
