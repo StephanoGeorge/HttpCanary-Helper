@@ -2,6 +2,7 @@ import argparse
 import gzip
 import json
 import re
+import shutil
 from pathlib import Path
 from urllib import parse
 
@@ -29,7 +30,14 @@ for ipFolder in workDirPath.iterdir():
     for file in ipFolder.iterdir():
         fileAttr = re.search(r'^http_(...)_(.+?)\.hcy$', file.name)
         if not fileAttr:
-            print(f'Not valid http capture: {file.resolve()}')
+            oldFile = file
+            hostPath = hostsPath / ipFolder.name
+            hostPath.mkdir(exist_ok=True)
+            file = hostPath / file.name
+            if remove:
+                oldFile.replace(file)
+            else:
+                shutil.copy(oldFile, file)
             continue
         fileTypeStr = fileAttr.group(1)
         sessionId = fileAttr.group(2)
