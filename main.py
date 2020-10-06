@@ -35,7 +35,7 @@ for ipFolder in workDirPath.iterdir():
         record = cls.HttpCaptureRecord.get_or_none(cls.HttpCaptureRecord.SESSION_ID == sessionId)
         if not record:
             print(f'No such SESSION_ID in database: {file.resolve()}')
-            exit()
+            continue
         oldFile = file
         hostPath = hostsPath / record.HOST
         hostPath.mkdir(exist_ok=True)
