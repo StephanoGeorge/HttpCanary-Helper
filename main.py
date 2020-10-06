@@ -101,4 +101,7 @@ for ipFolder in workDirPath.iterdir():
                     io4.write(responseBody)
     else:
         if remove:
-            ipFolder.rmdir()
+            try:
+                ipFolder.rmdir()
+            except OSError:
+                pass
