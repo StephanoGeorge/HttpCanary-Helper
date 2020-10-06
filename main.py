@@ -48,7 +48,7 @@ for ipFolder in workDirPath.iterdir():
         oldFile = file
         hostPath = hostsPath / record.HOST
         hostPath.mkdir(exist_ok=True)
-        file = hostPath / f'{sessionId}_{fileTypeStr}.hcy'
+        file = hostPath / f'http_{sessionId}_{fileTypeStr}.hcy'
         if remove:
             oldFile.replace(file)
             oldFile = file
