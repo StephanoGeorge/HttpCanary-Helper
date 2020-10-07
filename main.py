@@ -56,8 +56,9 @@ for ipFolder in workDirPath.iterdir():
             fileContent1 = bytearray(oldFile.read_bytes())
             urlSplitResult = parse.urlsplit(record.URL)
             queries = '\r\n'.join([f'{key} = {value}' for key, value in parse.parse_qsl(urlSplitResult.query)])
+            queries = f'{queries}\r\n' if queries else ''
             fileContent1[:fileContent1.index(b'\r\n')] = f'{record.METHOD} {record.REQ_PROTOCOL}\r\n{record.URL}\r\n' \
-                                                         f'{queries}\r\n'.encode()
+                                                         f'{queries}'.encode()
             file.write_bytes(fileContent1)
         else:
             isGzip = False
