@@ -20,9 +20,13 @@ Organize capture files
 
   格式化 JSON 响应
 
-- change uri to full url in request
+- change request uri to full url
 
   将请求的 uri 改为完整 url
+
+- format query parameters
+
+  格式化查询参数
 
 - (optional) delete processed files
 
