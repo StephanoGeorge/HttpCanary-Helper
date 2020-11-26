@@ -22,7 +22,7 @@ remove = args.r
 workDirPath = Path(workDir)
 hostsPath = workDirPath / 'hosts'
 hostsPath.mkdir(exist_ok=True)
-cls.HttpCaptureRecord._meta.database = pw.SqliteDatabase(dbPath)
+pw.SqliteDatabase(dbPath).bind([cls.HttpCaptureRecord])
 
 for ipFolder in workDirPath.iterdir():
     if not re.search(r'^[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}$', ipFolder.name):
