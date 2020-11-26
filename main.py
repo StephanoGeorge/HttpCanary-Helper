@@ -11,9 +11,9 @@ import peewee as pw
 import cls
 
 parser = argparse.ArgumentParser()
-parser.add_argument('-w', help='work directory')
+parser.add_argument('-w', help='Work directory')
 parser.add_argument('-d', help='HttpCanary main database path')
-parser.add_argument('-r', action='store_true', help='remove old hcy files')
+parser.add_argument('-r', action='store_true', help='Remove old capture files')
 args = parser.parse_args()
 workDir = args.w
 dbPath = args.d
@@ -30,6 +30,7 @@ for ipFolder in workDirPath.iterdir():
     for file in ipFolder.iterdir():
         fileAttr = re.search(r'^http_(...)_(.+?)\.hcy$', file.name)
         if not fileAttr:
+            # udp/ws
             oldFile = file
             hostPath = hostsPath / ipFolder.name
             hostPath.mkdir(exist_ok=True)
