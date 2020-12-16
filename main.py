@@ -12,8 +12,9 @@ import cls
 
 parser = argparse.ArgumentParser()
 parser.add_argument('-w', help='Work directory. /sdcard/Android/data/com.guoshi.httpcanary[.premium]/cache')
-parser.add_argument('-d',
-                    help='HttpCanary main database path. /data/data/com.guoshi.httpcanary[.premium]/databases/app. Note, should copy wal and shm files')
+parser.add_argument('-d', help='HttpCanary main database path. '
+                               '/data/data/com.guoshi.httpcanary[.premium]/databases/app. '
+                               'Note, should copy wal and shm files')
 parser.add_argument('-r', action='store_true', help='Remove old capture files')
 args = parser.parse_args()
 workDir = args.w
