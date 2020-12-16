@@ -34,6 +34,4 @@ Organize capture files
 
 # Running
 
-```shell script
-python3 main.py -w <work-directory> -d <HttpCanary-main-database-path> [-r]
-```
+See `python3 main.py -h`
